@@ -104,41 +104,105 @@ hr {
 # ---------------- HERO BANNER ----------------
 
 
+
 st.markdown("""
-<h1 style="color:#ffffff !important;
-           font-family:'Barlow Condensed',sans-serif !important;
-           font-size:clamp(44px,7vw,78px);
-           font-weight:800;line-height:0.98;
-           margin:0;max-width:590px;">
-    FIND YOUR<br>
-    <span style="color:#c9ff65;">OWN STYLE.</span>
-</h1>
+<style>
+.hero-banner {
+    background:
+        linear-gradient(90deg,
+            rgba(5, 25, 17, 0.96) 0%,
+            rgba(5, 25, 17, 0.78) 48%,
+            rgba(5, 25, 17, 0.25) 100%),
+        url("https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=85");
 
-<p style="color:#e2e9e4;font-size:15px;line-height:1.8;
-          max-width:360px;margin:20px 0 0 0;">
-    Discover your vibe. Explore new looks.
-    Find outfits that express who you are.
-</p>
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 440px;
+    padding: 55px 45px;
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
 
-<div style="margin-top:25px;display:inline-block;
-            color:#102018;background:#c9ff65;
-            border-radius:30px;padding:13px 24px;
-            font-size:12px;font-weight:800;
-            letter-spacing:1px;width:fit-content;">
-    FIND YOUR LOOK &nbsp; →
-</div>
+.hero-banner h1 {
+    color: #ffffff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(44px, 7vw, 78px);
+    font-weight: 800;
+    line-height: 0.98;
+    margin: 0;
+    max-width: 590px;
+}
 
-<div style="display:flex;flex-wrap:wrap;gap:20px;
-            margin-top:28px;color:#e2e9e4;font-size:11px;">
-    <span>✦ Personalised styles</span>
-    <span>✦ Budget-friendly picks</span>
-    <span>✦ Outfit inspiration</span>
+.hero-banner .accent {
+    color: #c9ff65;
+}
+
+.hero-banner p {
+    color: #e2e9e4;
+    font-size: 15px;
+    line-height: 1.8;
+    max-width: 360px;
+    margin-top: 20px;
+}
+
+.hero-banner .hero-button {
+    display: inline-block;
+    width: fit-content;
+    color: #102018;
+    background: #c9ff65;
+    border-radius: 30px;
+    padding: 13px 24px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
+.hero-banner .features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 28px;
+    color: #e2e9e4;
+    font-size: 11px;
+}
+
+@media (max-width: 600px) {
+    .hero-banner {
+        padding: 35px 22px;
+        min-height: 400px;
+        background-position: 60% center;
+    }
+}
+</style>
+
+<div class="hero-banner">
+    <h1>
+        FIND YOUR<br>
+        <span class="accent">OWN STYLE.</span>
+    </h1>
+
+    <p>
+        Discover your vibe. Explore new looks.
+        Find outfits that express who you are.
+    </p>
+
+    <div class="hero-button">
+        FIND YOUR LOOK &nbsp; →
+    </div>
+
+    <div class="features">
+        <span>✦ Personalised styles</span>
+        <span>✦ Budget-friendly picks</span>
+        <span>✦ Outfit inspiration</span>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
-
-st.title("Style Vision AI")
-st.write("Your personal AI fashion assistant.")
 
 # ---------------- LOAD PRODUCTS ----------------
 
