@@ -103,83 +103,7 @@ hr {
 
 # ---------------- HERO BANNER ----------------
 
-
-
 st.markdown("""
-<style>
-.hero-banner {
-    background:
-        linear-gradient(90deg,
-            rgba(5, 25, 17, 0.96) 0%,
-            rgba(5, 25, 17, 0.78) 48%,
-            rgba(5, 25, 17, 0.25) 100%),
-        url("https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1800&q=85");
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 440px;
-    padding: 55px 45px;
-    border-radius: 22px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.hero-banner h1 {
-    color: #ffffff;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: clamp(44px, 7vw, 78px);
-    font-weight: 800;
-    line-height: 0.98;
-    margin: 0;
-    max-width: 590px;
-}
-
-.hero-banner .accent {
-    color: #c9ff65;
-}
-
-.hero-banner p {
-    color: #e2e9e4;
-    font-size: 15px;
-    line-height: 1.8;
-    max-width: 360px;
-    margin-top: 20px;
-}
-
-.hero-banner .hero-button {
-    display: inline-block;
-    width: fit-content;
-    color: #102018;
-    background: #c9ff65;
-    border-radius: 30px;
-    padding: 13px 24px;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    margin-top: 10px;
-}
-
-.hero-banner .features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 28px;
-    color: #e2e9e4;
-    font-size: 11px;
-}
-
-@media (max-width: 600px) {
-    .hero-banner {
-        padding: 35px 22px;
-        min-height: 400px;
-        background-position: 60% center;
-    }
-}
-</style>
-
 <div class="hero-banner">
     <h1>
         FIND YOUR<br>
@@ -202,6 +126,7 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 # ---------------- LOAD PRODUCTS ----------------
