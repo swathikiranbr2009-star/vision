@@ -122,58 +122,23 @@ footer {
 
 # ===== URBAN STREETWEAR HERO BANNER =====
 
+
 st.markdown("""
-<div style="
-    position: relative;
-    overflow: hidden;
-    min-height: 340px;
-    padding: 45px 35px;
-    background:
-        linear-gradient(90deg, #080808 0%, #080808 38%,
-        rgba(8,8,8,0.65) 65%, rgba(8,8,8,0.1) 100%),
-        url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1600&q=85');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-bottom: 28px;
-">
-    <p style="
-        color: #c5ff00;
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 4px;
-        margin-bottom: 10px;
-    ">
+<div style="background:#080808; padding:35px; min-height:280px;">
+    <p style="color:#c5ff00; letter-spacing:4px;">
         STYLE VISION AI / STREETWEAR
     </p>
-
-    <h1 style="
-        color: #ffffff !important;
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: clamp(38px, 6vw, 66px);
-        font-weight: 800;
-        line-height: 0.98;
-        margin: 0;
-        max-width: 650px;
-    ">
+    <h1 style="color:white !important; font-size:48px;">
         BUILT DIFFERENT.<br>
         MADE TO <span style="color:#c5ff00;">STAND OUT.</span>
     </h1>
-
-    <p style="
-        color: #eeeeee;
-        font-size: 14px;
-        margin-top: 18px;
-        max-width: 380px;
-        line-height: 1.7;
-    ">
+    <p style="color:#eeeeee;">
         Discover your vibe. Explore new styles.
         Find outfits that express who you are.
     </p>
 </div>
 """, unsafe_allow_html=True)
+
 st.title("👗 Style Vision AI")
 st.subheader("Your Personal AI Fashion Assistant")
 st.write(
