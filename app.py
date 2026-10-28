@@ -11,6 +11,169 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+.stApp {
+    background: #ffffff;
+    color: #171717;
+    font-family: 'Inter', sans-serif;
+}
+
+.block-container {
+    max-width: 1500px;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+/* Main headings */
+h1, h2, h3, h4 {
+    color: #111111 !important;
+    font-family: 'Barlow Condensed', sans-serif !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background: #f5f5f3;
+    border-right: 1px solid #e4e4e4;
+}
+
+/* Inputs */
+.stTextInput input,
+.stTextArea textarea {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #cccccc !important;
+    border-radius: 3px !important;
+}
+
+/* Dropdowns */
+.stSelectbox div[data-baseweb="select"] {
+    background: #ffffff;
+    border-radius: 3px;
+}
+
+/* Buttons: neon lime streetwear style */
+.stButton > button {
+    background: #c5ff00;
+    color: #111111 !important;
+    border: 1px solid #c5ff00;
+    border-radius: 2px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.65rem 1rem;
+    transition: 0.2s ease;
+}
+
+.stButton > button:hover {
+    background: #111111;
+    color: #c5ff00 !important;
+    border-color: #111111;
+}
+
+/* Product images */
+[data-testid="stImage"] img {
+    border-radius: 2px;
+    object-fit: cover;
+}
+
+/* Product cards */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    background: #f7f7f5;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+/* Metrics */
+[data-testid="stMetric"] {
+    background: #f5f5f3;
+    border: 1px solid #e5e5e5;
+    padding: 14px;
+    border-radius: 3px;
+}
+
+[data-testid="stMetricValue"] {
+    color: #171717;
+    font-weight: 800;
+}
+
+/* Dividers */
+hr {
+    border-color: #dedede;
+}
+
+/* Captions */
+[data-testid="stCaptionContainer"] {
+    color: #666666;
+}
+
+/* Remove Streamlit footer */
+footer {
+    visibility: hidden;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+# ===== URBAN STREETWEAR HERO BANNER =====
+
+st.markdown("""
+<div style="
+    position: relative;
+    overflow: hidden;
+    min-height: 340px;
+    padding: 45px 35px;
+    background:
+        linear-gradient(90deg, #080808 0%, #080808 38%,
+        rgba(8,8,8,0.65) 65%, rgba(8,8,8,0.1) 100%),
+        url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1600&q=85');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 28px;
+">
+    <p style="
+        color: #c5ff00;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 4px;
+        margin-bottom: 10px;
+    ">
+        STYLE VISION AI / STREETWEAR
+    </p>
+
+    <h1 style="
+        color: #ffffff !important;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: clamp(38px, 6vw, 66px);
+        font-weight: 800;
+        line-height: 0.98;
+        margin: 0;
+        max-width: 650px;
+    ">
+        BUILT DIFFERENT.<br>
+        MADE TO <span style="color:#c5ff00;">STAND OUT.</span>
+    </h1>
+
+    <p style="
+        color: #eeeeee;
+        font-size: 14px;
+        margin-top: 18px;
+        max-width: 380px;
+        line-height: 1.7;
+    ">
+        Discover your vibe. Explore new styles.
+        Find outfits that express who you are.
+    </p>
+</div>
+""", unsafe_allow_html=True)
 st.title("👗 Style Vision AI")
 st.subheader("Your Personal AI Fashion Assistant")
 st.write(
