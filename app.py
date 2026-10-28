@@ -103,62 +103,39 @@ hr {
 
 # ---------------- HERO BANNER ----------------
 
+
 st.markdown("""
-<div style="
-    position:relative;
-    overflow:hidden;
-    min-height:390px;
-    padding:clamp(24px,5vw,55px);
-    border:1px solid #426354;
-    border-radius:20px;
-    background:
-        linear-gradient(90deg,
-        rgba(4,23,19,0.98) 0%,
-        rgba(4,23,19,0.85) 45%,
-        rgba(4,23,19,0.20) 100%),
-        url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1600&q=85')
-        center/cover no-repeat;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    margin-bottom:28px;
-">
-    <p style="color:#c9ff65;font-size:12px;font-weight:700;
-              letter-spacing:4px;margin:0 0 18px 0;">
-        STYLE VISION AI / PERSONAL STYLING
-    </p>
+<h1 style="color:#ffffff !important;
+           font-family:'Barlow Condensed',sans-serif !important;
+           font-size:clamp(44px,7vw,78px);
+           font-weight:800;line-height:0.98;
+           margin:0;max-width:590px;">
+    FIND YOUR<br>
+    <span style="color:#c9ff65;">OWN STYLE.</span>
+</h1>
 
-    <h1 style="color:#ffffff !important;
-               font-family:'Barlow Condensed',sans-serif !important;
-               font-size:clamp(44px,7vw,78px);
-               font-weight:800;line-height:0.98;
-               margin:0;max-width:590px;">
-        FIND YOUR<br>
-        <span style="color:#c9ff65;">OWN STYLE.</span>
-    </h1>
+<p style="color:#e2e9e4;font-size:15px;line-height:1.8;
+          max-width:360px;margin:20px 0 0 0;">
+    Discover your vibe. Explore new looks.
+    Find outfits that express who you are.
+</p>
 
-    <p style="color:#e2e9e4;font-size:15px;line-height:1.8;
-              max-width:360px;margin:20px 0 0 0;">
-        Discover your vibe. Explore new looks.
-        Find outfits that express who you are.
-    </p>
+<div style="margin-top:25px;display:inline-block;
+            color:#102018;background:#c9ff65;
+            border-radius:30px;padding:13px 24px;
+            font-size:12px;font-weight:800;
+            letter-spacing:1px;width:fit-content;">
+    FIND YOUR LOOK &nbsp; →
+</div>
 
-    <div style="margin-top:25px;display:inline-block;
-                color:#102018;background:#c9ff65;
-                border-radius:30px;padding:13px 24px;
-                font-size:12px;font-weight:800;
-                letter-spacing:1px;width:fit-content;">
-        FIND YOUR LOOK &nbsp; →
-    </div>
-
-    <div style="display:flex;flex-wrap:wrap;gap:20px;
-                margin-top:28px;color:#e2e9e4;font-size:11px;">
-        <span>✦ Personalised styles</span>
-        <span>✦ Budget-friendly picks</span>
-        <span>✦ Outfit inspiration</span>
-    </div>
+<div style="display:flex;flex-wrap:wrap;gap:20px;
+            margin-top:28px;color:#e2e9e4;font-size:11px;">
+    <span>✦ Personalised styles</span>
+    <span>✦ Budget-friendly picks</span>
+    <span>✦ Outfit inspiration</span>
 </div>
 """, unsafe_allow_html=True)
+
 
 st.title("Style Vision AI")
 st.write("Your personal AI fashion assistant.")
