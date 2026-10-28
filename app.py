@@ -4,7 +4,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # ---------------- PAGE SETUP ----------------
-
+st.set_page_config(
+    page_title="Style Vision AI",
+    page_icon="👗",
+    layout="wide"
+)
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
@@ -182,11 +186,15 @@ def load_products():
     for column in required:
         if column not in data.columns:
             raise ValueError(
-                f"Missing column in clothes.csv: {column}"
-            )
+                f"Missing column in clothes.csv: {column}")
+    
+data["price"] = pd.to_numeric(
+    data["price"].astype(str).str.replace(
+        r"[₹,\s]", "", regex=True
+    ),
+    errors="coerce"
+)
 
-    data["price"] = pd.to_numeric(
-        data["price"], errors="coerce"
     )
     data = data.dropna(subset=["price"]).copy()
 
