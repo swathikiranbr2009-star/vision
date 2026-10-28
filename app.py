@@ -352,13 +352,6 @@ if st.button("Find My Style", type="primary"):
 # ---------------- PREPARE AI MODEL ----------------
 
 
-try:
-    vectorizer = TfidfVectorizer(stop_words="english")
-    product_vectors = vectorizer.fit_transform(df["search_text"])
-except ValueError:
-    st.error("Your product descriptions are empty. Add product text to clothes.csv.")
-    st.stop()
-
 # ---------------- SIDEBAR FILTERS ----------------
 
 st.sidebar.header("Your Preferences")
