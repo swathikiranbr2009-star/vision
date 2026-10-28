@@ -5,6 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import moondream as md
 from PIL import Image
+import requests
 
 # ---------------- PAGE SETUP ----------------
 
@@ -145,41 +146,208 @@ st.markdown("""
 
 # ---------------- LOAD PRODUCTS ----------------
 
-def load_products():
-    data = pd.read_csv("clothes.csv")
 
-    # Convert prices into numbers
-    data["price"] = pd.to_numeric(
-        data["price"]
-        .astype(str)
-        .str.replace("₹", "", regex=False)
-        .str.replace(",", "", regex=False)
-        .str.strip(),
-        errors="coerce"
+# ---------------- REAL SHOPPING PRODUCTS ----------------
+
+st.header("Find Your Style")
+st.write("Discover real men's clothing with AI-powered similarity matching.")
+
+preference = st.text_input(
+    "Describe what you're looking for",
+    placeholder="e.g. black oversized shirt for college"
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    category = st.selectbox(
+        "Category",
+        ["Any", "Shirts", "T-shirts", "Jeans", "Trousers", "Jackets", "Hoodies"]
     )
 
-    # Remove products with invalid prices
-    data = data.dropna(subset=["price"]).copy()
-    data["price"] = data["price"].astype(float)
-
-    return data
-
-
-
-
-try:
-    df = load_products()
-except Exception as error:
-    st.error(f"Could not load clothes.csv: {error}")
-    st.info(
-        "Check that clothes.csv is in the same folder as app.py "
-        "and contains the required column names."
+    color = st.selectbox(
+        "Preferred colour",
+        ["Any", "Black", "White", "Blue", "Grey", "Green", "Brown", "Beige"]
     )
-    st.stop()
 
-if df.empty:
-    st.warning("No products with valid prices were found in clothes.csv.")
-    st.stop()
+with col2:
+    style = st.selectbox(
+        "Fashion style",
+        ["Any", "Casual", "Streetwear", "Minimalist", "Formal", "Sporty"]
+    )
+
+    occasion = st.selectbox(
+        "Occasion",
+        ["Any", "College", "Daily wear", "Party", "Formal", "Festival"]
+    )
+
+budget = st.slider(
+    "Maximum budget (₹)",
+    min_value=500,
+    max_value=10000,
+    value=2000,
+    step=100
+)
+
+if st.button("Find My Style", type="primary"):
+    api_key = st.secrets.get("SERPAPI_KEY", "")
+
+    if not api_key:
+        st.error("SerpApi key missing. Add SERPAPI_KEY in Streamlit Secrets.")
+
+    elif not preference.strip() and all(
+        x == "Any" for x in [category, color, style, occasion]
+    ):
+        st.warning("Enter a clothing preference or select a filter.")
+
+    else:
+        query_parts = [
+            "men's clothing",
+            preference.strip(),
+            "" if category == "Any" else category,
+            "" if color == "Any" else color,
+            "" if style == "Any" else style,
+            "" if occasion == "Any" else occasion
+        ]
+
+        shopping_query = " ".join(x for x in query_parts if x).strip()
+
+        try:
+            with st.spinner("Finding real products..."):
+                response = requests.get(
+                    "https://serpapi.com/search.json",
+                    params={
+                        "engine": "google_shopping",
+                        "q": shopping_query,
+                        "api_key": api_key,
+                        "gl": "in",
+                        "hl": "en",
+                        "google_domain": "google.co.in",
+                        "max_price": budget
+                    },
+                    timeout=30
+                )
+
+                response.raise_for_status()
+                data = response.json()
+
+            if data.get("error"):
+                st.error(f"Shopping search error: {data['error']}")
+
+            else:
+                products = data.get("shopping_results", [])
+
+                # Keep men's clothing results within the selected budget.
+                valid_products = []
+
+                for product in products:
+                    title = product.get("title", "")
+                    price = product.get("extracted_price")
+                    image_url = product.get("thumbnail", "")
+                    product_url = (
+                        product.get("product_link")
+                        or product.get("link", "")
+                    )
+
+                    if not title or price is None:
+                        continue
+
+                    try:
+                        price = float(price)
+                    except (ValueError, TypeError):
+                        continue
+
+                    if price > budget:
+                        continue
+
+                    valid_products.append({
+                        "name": title,
+                        "price": price,
+                        "image": image_url,
+                        "link": product_url,
+                        "source": product.get("source", ""),
+                        "description": product.get("snippet", "")
+                    })
+
+                if not valid_products:
+                    st.warning(
+                        "No suitable priced products found. "
+                        "Try a different search or increase your budget."
+                    )
+
+                else:
+                    # Rank the returned products by text similarity.
+                    product_texts = [
+                        p["name"] + " " + p["description"]
+                        for p in valid_products
+                    ]
+
+                    search_text = " ".join([
+                        preference,
+                        category if category != "Any" else "",
+                        color if color != "Any" else "",
+                        style if style != "Any" else "",
+                        occasion if occasion != "Any" else ""
+                    ]).strip()
+
+                    if search_text:
+                        vectorizer = TfidfVectorizer(stop_words="english")
+                        vectors = vectorizer.fit_transform(
+                            [search_text] + product_texts
+                        )
+
+                        scores = cosine_similarity(
+                            vectors[0:1], vectors[1:]
+                        ).flatten()
+                    else:
+                        scores = [0.0] * len(valid_products)
+
+                    ranked = sorted(
+                        zip(valid_products, scores),
+                        key=lambda item: item[1],
+                        reverse=True
+                    )
+
+                    st.success(f"Found {len(ranked)} matching products!")
+                    st.subheader("Recommended for You")
+
+                    columns = st.columns(3)
+
+                    for index, (product, score) in enumerate(ranked):
+                        with columns[index % 3]:
+                            with st.container(border=True):
+                                if product["image"].startswith("https://") or (
+                                    product["image"].startswith("http://")
+                                ):
+                                    st.image(
+                                        product["image"],
+                                        use_container_width=True
+                                    )
+
+                                st.markdown(f"### {product['name']}")
+                                st.write(f"**Price:** ₹{product['price']:.0f}")
+
+                                if product["source"]:
+                                    st.caption(f"Store: {product['source']}")
+
+                                st.progress(
+                                    float(score),
+                                    text=f"Text similarity: {score * 100:.0f}%"
+                                )
+
+                                if product["link"]:
+                                    st.link_button(
+                                        "View Product",
+                                        product["link"],
+                                        use_container_width=True
+                                    )
+
+        except requests.RequestException as error:
+            st.error("Could not fetch shopping results. Check your connection.")
+            st.caption(str(error))
+
+# ---------------- END SHOPPING PRODUCTS ----------------
+
 
 # ---------------- PREPARE AI MODEL ----------------
 
@@ -412,7 +580,7 @@ with st.expander("About this project"):
     st.write(
         "This is a content-based recommendation demo, not a trained "
         "commercial AI system. Recommendations depend on the products "
-        "available in clothes.csv."
+        "of Google Shopping results through SerpApi."
     )
 
 st.caption("Style Vision AI | AI Project Prototype")
