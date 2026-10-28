@@ -1,14 +1,19 @@
+
 import streamlit as st
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # ---------------- PAGE SETUP ----------------
+
 st.set_page_config(
     page_title="Style Vision AI",
     page_icon="👗",
     layout="wide"
 )
+
+# ---------------- CUSTOM DESIGN ----------------
+
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
@@ -40,7 +45,8 @@ h1, h2, h3, h4 {
     color: #f5f7f3;
 }
 
-.stTextInput input, .stTextArea textarea,
+.stTextInput input,
+.stTextArea textarea,
 .stSelectbox div[data-baseweb="select"] {
     background: #102c24 !important;
     color: white !important;
@@ -55,7 +61,6 @@ h1, h2, h3, h4 {
     border-radius: 30px;
     font-weight: 800;
     padding: 0.65rem 1.3rem;
-    transition: 0.2s ease;
 }
 
 .stButton > button:hover {
@@ -93,10 +98,10 @@ p, label, [data-testid="stCaptionContainer"] {
 hr {
     border-color: #355748;
 }
-
 </style>
 """, unsafe_allow_html=True)
 
+# ---------------- HERO BANNER ----------------
 
 st.markdown("""
 <div style="
@@ -109,8 +114,8 @@ st.markdown("""
     background:
         linear-gradient(90deg,
         rgba(4,23,19,0.98) 0%,
-        rgba(4,23,19,0.88) 42%,
-        rgba(4,23,19,0.15) 100%),
+        rgba(4,23,19,0.85) 45%,
+        rgba(4,23,19,0.20) 100%),
         url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1600&q=85')
         center/cover no-repeat;
     display:flex;
@@ -118,55 +123,36 @@ st.markdown("""
     justify-content:center;
     margin-bottom:28px;
 ">
-    <p style="
-        color:#c9ff65;
-        font-size:12px;
-        font-weight:700;
-        letter-spacing:4px;
-        margin:0 0 18px 0;
-    ">STYLE VISION AI / PERSONAL STYLING</p>
+    <p style="color:#c9ff65;font-size:12px;font-weight:700;
+              letter-spacing:4px;margin:0 0 18px 0;">
+        STYLE VISION AI / PERSONAL STYLING
+    </p>
 
-    <h1 style="
-        color:#ffffff !important;
-        font-family:'Barlow Condensed',sans-serif !important;
-        font-size:clamp(44px,7vw,78px);
-        font-weight:800;
-        line-height:0.98;
-        margin:0;
-        max-width:590px;
-    ">FIND YOUR<br>
-    <span style="color:#c9ff65;">OWN STYLE.</span></h1>
+    <h1 style="color:#ffffff !important;
+               font-family:'Barlow Condensed',sans-serif !important;
+               font-size:clamp(44px,7vw,78px);
+               font-weight:800;line-height:0.98;
+               margin:0;max-width:590px;">
+        FIND YOUR<br>
+        <span style="color:#c9ff65;">OWN STYLE.</span>
+    </h1>
 
-    <p style="
-        color:#e2e9e4;
-        font-size:15px;
-        line-height:1.8;
-        max-width:360px;
-        margin:20px 0 0 0;
-    ">Discover your vibe. Explore new looks.
-    Find outfits that express who you are.</p>
+    <p style="color:#e2e9e4;font-size:15px;line-height:1.8;
+              max-width:360px;margin:20px 0 0 0;">
+        Discover your vibe. Explore new looks.
+        Find outfits that express who you are.
+    </p>
 
-    <div style="
-        margin-top:25px;
-        display:inline-block;
-        color:#102018;
-        background:#c9ff65;
-        border-radius:30px;
-        padding:13px 24px;
-        font-size:12px;
-        font-weight:800;
-        letter-spacing:1px;
-        width:fit-content;
-    ">FIND YOUR LOOK &nbsp; →</div>
+    <div style="margin-top:25px;display:inline-block;
+                color:#102018;background:#c9ff65;
+                border-radius:30px;padding:13px 24px;
+                font-size:12px;font-weight:800;
+                letter-spacing:1px;width:fit-content;">
+        FIND YOUR LOOK &nbsp; →
+    </div>
 
-    <div style="
-        display:flex;
-        flex-wrap:wrap;
-        gap:20px;
-        margin-top:28px;
-        color:#e2e9e4;
-        font-size:11px;
-    ">
+    <div style="display:flex;flex-wrap:wrap;gap:20px;
+                margin-top:28px;color:#e2e9e4;font-size:11px;">
         <span>✦ Personalised styles</span>
         <span>✦ Budget-friendly picks</span>
         <span>✦ Outfit inspiration</span>
@@ -174,10 +160,15 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+st.title("Style Vision AI")
+st.write("Your personal AI fashion assistant.")
+
 # ---------------- LOAD PRODUCTS ----------------
 
+@st.cache_data
 def load_products():
     data = pd.read_csv("clothes.csv")
+
     required = [
         "name", "category", "color", "style",
         "occasion", "price", "description", "image"
@@ -190,8 +181,12 @@ def load_products():
             )
 
     data["price"] = pd.to_numeric(
-        data["price"], errors="coerce"
+        data["price"].astype(str).str.replace(
+            r"[₹,\s]", "", regex=True
+        ),
+        errors="coerce"
     )
+
     data = data.dropna(subset=["price"]).copy()
 
     for column in required:
@@ -200,20 +195,18 @@ def load_products():
     return data
 
 
-
-
 try:
     df = load_products()
 except Exception as error:
     st.error(f"Could not load clothes.csv: {error}")
     st.info(
-        "Make sure clothes.csv is in the same folder as app.py "
-        "and contains the required column headings."
+        "Check that clothes.csv is in the same folder as app.py "
+        "and contains the required column names."
     )
     st.stop()
 
 if df.empty:
-    st.warning("Add some products to products.csv first.")
+    st.warning("No products with valid prices were found in clothes.csv.")
     st.stop()
 
 # ---------------- PREPARE AI MODEL ----------------
@@ -227,12 +220,16 @@ df["search_text"] = (
     df["description"]
 )
 
-vectorizer = TfidfVectorizer(stop_words="english")
-product_vectors = vectorizer.fit_transform(df["search_text"])
+try:
+    vectorizer = TfidfVectorizer(stop_words="english")
+    product_vectors = vectorizer.fit_transform(df["search_text"])
+except ValueError:
+    st.error("Your product descriptions are empty. Add product text to clothes.csv.")
+    st.stop()
 
 # ---------------- SIDEBAR FILTERS ----------------
 
-st.sidebar.header("🎯 Your Preferences")
+st.sidebar.header("Your Preferences")
 
 max_price = int(df["price"].max())
 min_price = int(df["price"].min())
@@ -270,7 +267,7 @@ occasion = st.sidebar.selectbox(
 
 # ---------------- FASHION SEARCH ----------------
 
-st.header("✨ Find Your Style")
+st.header("Find Your Style")
 
 preference = st.text_input(
     "Describe what you're looking for",
@@ -284,33 +281,20 @@ if "search_clicked" not in st.session_state:
     st.session_state["search_clicked"] = False
 
 # ---------------- FILTER PRODUCTS ----------------
-df["price"] = pd.to_numeric(
-    df["price"].astype(str).str.replace(r"[₹,\s]", "", regex=True),
-    errors="coerce"
-)
-df = df.dropna(subset=["price"]).copy()
 
 filtered = df[df["price"] <= budget].copy()
 
 if category != "Any":
-    filtered = filtered[
-        filtered["category"] == category
-    ]
+    filtered = filtered[filtered["category"] == category]
 
 if color != "Any":
-    filtered = filtered[
-        filtered["color"] == color
-    ]
+    filtered = filtered[filtered["color"] == color]
 
 if style != "Any":
-    filtered = filtered[
-        filtered["style"] == style
-    ]
+    filtered = filtered[filtered["style"] == style]
 
 if occasion != "Any":
-    filtered = filtered[
-        filtered["occasion"] == occasion
-    ]
+    filtered = filtered[filtered["occasion"] == occasion]
 
 # ---------------- AI RECOMMENDATIONS ----------------
 
@@ -330,13 +314,11 @@ if st.session_state["search_clicked"]:
             "No products match these filters. "
             "Try increasing your budget or changing your preferences."
         )
-
     else:
         if query:
             query_vector = vectorizer.transform([query])
             scores = cosine_similarity(
-                query_vector,
-                product_vectors
+                query_vector, product_vectors
             ).flatten()
 
             filtered["AI Match Score"] = scores[filtered.index]
@@ -351,13 +333,10 @@ if st.session_state["search_clicked"]:
             f"Found {len(filtered)} products within your preferences!"
         )
 
-        st.subheader("🛍️ Recommended for You")
-
+        st.subheader("Recommended for You")
         columns = st.columns(3)
 
-        for position, (_, product) in enumerate(
-            filtered.iterrows()
-        ):
+        for position, (_, product) in enumerate(filtered.iterrows()):
             with columns[position % 3]:
                 st.markdown("---")
 
@@ -375,17 +354,16 @@ if st.session_state["search_clicked"]:
                 st.write(f"**Occasion:** {product['occasion']}")
                 st.caption(product["description"])
 
-                score = product["AI Match Score"] * 100
+                score = float(product["AI Match Score"]) * 100
                 st.progress(
-                    min(1.0, max(0.0, float(score))),
+                    min(1.0, max(0.0, score / 100)),
                     text=f"Text similarity: {score:.0f}%"
                 )
 
-                feedback_key = f"feedback_{product.name}"
                 feedback = st.selectbox(
                     "Your feedback",
                     ["Choose feedback", "👍 Like", "👎 Dislike"],
-                    key=feedback_key
+                    key=f"feedback_{product.name}"
                 )
 
                 if feedback in ["👍 Like", "👎 Dislike"]:
@@ -396,18 +374,20 @@ if st.session_state["search_clicked"]:
 
         # ---------------- OUTFIT SUGGESTIONS ----------------
 
-        st.subheader("👕 Outfit Suggestions")
+        st.subheader("Outfit Suggestions")
 
         tops = filtered[
             filtered["category"].str.lower().isin(
                 ["tops", "top", "shirt", "t-shirt"]
             )
         ]
+
         bottoms = filtered[
             filtered["category"].str.lower().isin(
                 ["bottoms", "bottom", "pants", "jeans"]
             )
         ]
+
         shoes = filtered[
             filtered["category"].str.lower().isin(
                 ["shoes", "footwear"]
@@ -442,16 +422,15 @@ if st.session_state["search_clicked"]:
                 "Add products from different categories to your "
                 "catalogue to generate more outfit combinations."
             )
-
 else:
     st.info(
         "Choose your filters, describe your style, "
-        "and click **Find My Style** to see recommendations."
+        "and click Find My Style to see recommendations."
     )
 
 # ---------------- PROJECT INFORMATION ----------------
 
-with st.expander("ℹ️ About this project"):
+with st.expander("About this project"):
     st.write(
         "Style Vision AI is a fashion recommendation prototype. "
         "It uses TF-IDF and cosine similarity to compare a user's "
@@ -460,9 +439,10 @@ with st.expander("ℹ️ About this project"):
     )
     st.write(
         "This is a content-based recommendation demo, not a trained "
-        "commercial AI system. Its recommendations depend on the "
-        "products available in clothes.csv."
+        "commercial AI system. Recommendations depend on the products "
+        "available in clothes.csv."
     )
 
 st.caption("Style Vision AI | AI Project Prototype")
+
 
