@@ -351,14 +351,6 @@ if st.button("Find My Style", type="primary"):
 
 # ---------------- PREPARE AI MODEL ----------------
 
-df["search_text"] = (
-    df["name"] + " " +
-    df["category"] + " " +
-    df["color"] + " " +
-    df["style"] + " " +
-    df["occasion"] + " " +
-    df["description"]
-)
 
 try:
     vectorizer = TfidfVectorizer(stop_words="english")
