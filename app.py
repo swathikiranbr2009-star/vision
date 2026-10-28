@@ -168,7 +168,7 @@ st.write("Your personal AI fashion assistant.")
 @st.cache_data
 def load_products():
     
-df = pd.read_csv("clothes.csv")
+    df = pd.read_csv("clothes.csv")
 
 # Convert price values into numbers
 df["price"] = pd.to_numeric(
