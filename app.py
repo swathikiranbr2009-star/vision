@@ -5,6 +5,170 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # ---------------- PAGE SETUP ----------------
 
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+.stApp {
+    background: radial-gradient(ellipse at 75% 5%, #254a36 0%, #0b271f 42%, #041713 100%);
+    color: #f5f7f3;
+    font-family: 'Inter', sans-serif;
+}
+
+.block-container {
+    max-width: 1450px;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+h1, h2, h3, h4 {
+    color: #f5f7f3 !important;
+    font-family: 'Barlow Condensed', sans-serif !important;
+    font-weight: 800 !important;
+}
+
+[data-testid="stSidebar"] {
+    background: #0b211b;
+    border-right: 1px solid #355748;
+}
+
+[data-testid="stSidebar"] * {
+    color: #f5f7f3;
+}
+
+.stTextInput input, .stTextArea textarea,
+.stSelectbox div[data-baseweb="select"] {
+    background: #102c24 !important;
+    color: white !important;
+    border: 1px solid #426354 !important;
+    border-radius: 10px !important;
+}
+
+.stButton > button {
+    background: #c9ff65;
+    color: #102018 !important;
+    border: 1px solid #c9ff65;
+    border-radius: 30px;
+    font-weight: 800;
+    padding: 0.65rem 1.3rem;
+    transition: 0.2s ease;
+}
+
+.stButton > button:hover {
+    background: #e0ffa3;
+    border-color: #e0ffa3;
+}
+
+[data-testid="stImage"] img {
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+[data-testid="stVerticalBlockBorderWrapper"] {
+    background: rgba(20, 51, 41, 0.85);
+    border: 1px solid #355748;
+    border-radius: 14px;
+    padding: 12px;
+}
+
+[data-testid="stMetric"] {
+    background: #102c24;
+    border: 1px solid #355748;
+    padding: 14px;
+    border-radius: 12px;
+}
+
+[data-testid="stMetricValue"] {
+    color: #c9ff65;
+}
+
+p, label, [data-testid="stCaptionContainer"] {
+    color: #e0e9e2;
+}
+
+hr {
+    border-color: #355748;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+st.markdown("""
+<div style="
+    position:relative;
+    overflow:hidden;
+    min-height:390px;
+    padding:clamp(24px,5vw,55px);
+    border:1px solid #426354;
+    border-radius:20px;
+    background:
+        linear-gradient(90deg,
+        rgba(4,23,19,0.98) 0%,
+        rgba(4,23,19,0.88) 42%,
+        rgba(4,23,19,0.15) 100%),
+        url('https://images.unsplash.com/photo-1523398002811-999ca8dec234?auto=format&fit=crop&w=1600&q=85')
+        center/cover no-repeat;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    margin-bottom:28px;
+">
+    <p style="
+        color:#c9ff65;
+        font-size:12px;
+        font-weight:700;
+        letter-spacing:4px;
+        margin:0 0 18px 0;
+    ">STYLE VISION AI / PERSONAL STYLING</p>
+
+    <h1 style="
+        color:#ffffff !important;
+        font-family:'Barlow Condensed',sans-serif !important;
+        font-size:clamp(44px,7vw,78px);
+        font-weight:800;
+        line-height:0.98;
+        margin:0;
+        max-width:590px;
+    ">FIND YOUR<br>
+    <span style="color:#c9ff65;">OWN STYLE.</span></h1>
+
+    <p style="
+        color:#e2e9e4;
+        font-size:15px;
+        line-height:1.8;
+        max-width:360px;
+        margin:20px 0 0 0;
+    ">Discover your vibe. Explore new looks.
+    Find outfits that express who you are.</p>
+
+    <div style="
+        margin-top:25px;
+        display:inline-block;
+        color:#102018;
+        background:#c9ff65;
+        border-radius:30px;
+        padding:13px 24px;
+        font-size:12px;
+        font-weight:800;
+        letter-spacing:1px;
+        width:fit-content;
+    ">FIND YOUR LOOK &nbsp; →</div>
+
+    <div style="
+        display:flex;
+        flex-wrap:wrap;
+        gap:20px;
+        margin-top:28px;
+        color:#e2e9e4;
+        font-size:11px;
+    ">
+        <span>✦ Personalised styles</span>
+        <span>✦ Budget-friendly picks</span>
+        <span>✦ Outfit inspiration</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # ---------------- LOAD PRODUCTS ----------------
 
