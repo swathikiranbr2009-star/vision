@@ -11,49 +11,171 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("👗 Style Vision AI")
-st.subheader("Your Personal AI Fashion Assistant")
-st.write(
-    "Discover fashion that matches your style, preferences and budget."
-)
+# ---------------- CUSTOM DESIGN ----------------
+
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+.stApp {
+    background: radial-gradient(ellipse at 75% 5%, #254a36 0%, #0b271f 42%, #041713 100%);
+    color: #f5f7f3;
+    font-family: 'Inter', sans-serif;
+}
+
+.block-container {
+    max-width: 1450px;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+h1, h2, h3, h4 {
+    color: #f5f7f3 !important;
+    font-family: 'Barlow Condensed', sans-serif !important;
+    font-weight: 800 !important;
+}
+
+[data-testid="stSidebar"] {
+    background: #0b211b;
+    border-right: 1px solid #355748;
+}
+
+[data-testid="stSidebar"] * {
+    color: #f5f7f3;
+}
+
+.stTextInput input,
+.stTextArea textarea,
+.stSelectbox div[data-baseweb="select"] {
+    background: #102c24 !important;
+    color: white !important;
+    border: 1px solid #426354 !important;
+    border-radius: 10px !important;
+}
+
+.stButton > button {
+    background: #c9ff65;
+    color: #102018 !important;
+    border: 1px solid #c9ff65;
+    border-radius: 30px;
+    font-weight: 800;
+    padding: 0.65rem 1.3rem;
+}
+
+.stButton > button:hover {
+    background: #e0ffa3;
+    border-color: #e0ffa3;
+}
+
+[data-testid="stImage"] img {
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+[data-testid="stVerticalBlockBorderWrapper"] {
+    background: rgba(20, 51, 41, 0.85);
+    border: 1px solid #355748;
+    border-radius: 14px;
+    padding: 12px;
+}
+
+[data-testid="stMetric"] {
+    background: #102c24;
+    border: 1px solid #355748;
+    padding: 14px;
+    border-radius: 12px;
+}
+
+[data-testid="stMetricValue"] {
+    color: #c9ff65;
+}
+
+p, label, [data-testid="stCaptionContainer"] {
+    color: #e0e9e2;
+}
+
+hr {
+    border-color: #355748;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------- HERO BANNER ----------------
+
+st.markdown("""
+<style>
+.hero-banner {
+    background:
+        linear-gradient(90deg, rgba(5,22,15,0.96), rgba(5,22,15,0.2)),
+        url("https://cdn.dribbble.com/userupload/47787263/file/b0a8b0925f7d0b5b7162137d55cda5d9.jpg?resize=1024x768&vertical=center");
+    background-size: cover;
+    background-position: center;
+    min-height: 440px;
+    padding: 45px;
+    border-radius: 22px;
+}
+
+.hero-banner h1 {
+    color: white;
+    font-size: clamp(44px, 7vw, 78px);
+}
+
+.hero-banner .accent {
+    color: #c9ff65;
+}
+</style>
+
+<div class="hero-banner">
+    <h1>FIND YOUR<br><span class="accent">OWN STYLE.</span></h1>
+    <p>Discover your vibe. Explore new looks. Find outfits that express who you are.</p>
+    <div class="hero-button">FIND YOUR LOOK &nbsp; →</div>
+    <div class="features">
+        <span>✦ Personalised styles</span>
+        <span>✦ Budget-friendly picks</span>
+        <span>✦ Outfit inspiration</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+
+
 
 # ---------------- LOAD PRODUCTS ----------------
+
 def load_products():
     data = pd.read_csv("clothes.csv")
-    required = [
-        "name", "category", "color", "style",
-        "occasion", "price", "description", "image"
-    ]
 
-    for column in required:
-        if column not in data.columns:
-            raise ValueError(
-                f"Missing column in clothes.csv: {column}"
-            )
-
+    # Convert prices into numbers
     data["price"] = pd.to_numeric(
-        data["price"], errors="coerce"
+        data["price"]
+        .astype(str)
+        .str.replace("₹", "", regex=False)
+        .str.replace(",", "", regex=False)
+        .str.strip(),
+        errors="coerce"
     )
-    data = data.dropna(subset=["price"]).copy()
 
-    for column in required:
-        data[column] = data[column].fillna("").astype(str)
+    # Remove products with invalid prices
+    data = data.dropna(subset=["price"]).copy()
+    data["price"] = data["price"].astype(float)
 
     return data
+
+
 
 
 try:
     df = load_products()
 except Exception as error:
-    st.error(f"Could not load products.csv: {error}")
+    st.error(f"Could not load clothes.csv: {error}")
     st.info(
-        "Make sure products.csv is in the same folder as app.py "
-        "and contains the required column headings."
+        "Check that clothes.csv is in the same folder as app.py "
+        "and contains the required column names."
     )
     st.stop()
 
 if df.empty:
-    st.warning("Add some products to products.csv first.")
+    st.warning("No products with valid prices were found in clothes.csv.")
     st.stop()
 
 # ---------------- PREPARE AI MODEL ----------------
@@ -67,12 +189,16 @@ df["search_text"] = (
     df["description"]
 )
 
-vectorizer = TfidfVectorizer(stop_words="english")
-product_vectors = vectorizer.fit_transform(df["search_text"])
+try:
+    vectorizer = TfidfVectorizer(stop_words="english")
+    product_vectors = vectorizer.fit_transform(df["search_text"])
+except ValueError:
+    st.error("Your product descriptions are empty. Add product text to clothes.csv.")
+    st.stop()
 
 # ---------------- SIDEBAR FILTERS ----------------
 
-st.sidebar.header("🎯 Your Preferences")
+st.sidebar.header("Your Preferences")
 
 max_price = int(df["price"].max())
 min_price = int(df["price"].min())
@@ -110,7 +236,7 @@ occasion = st.sidebar.selectbox(
 
 # ---------------- FASHION SEARCH ----------------
 
-st.header("✨ Find Your Style")
+st.header("Find Your Style")
 
 preference = st.text_input(
     "Describe what you're looking for",
@@ -124,33 +250,20 @@ if "search_clicked" not in st.session_state:
     st.session_state["search_clicked"] = False
 
 # ---------------- FILTER PRODUCTS ----------------
-df["price"] = pd.to_numeric(
-    df["price"].astype(str).str.replace(r"[₹,\s]", "", regex=True),
-    errors="coerce"
-)
-df = df.dropna(subset=["price"]).copy()
 
 filtered = df[df["price"] <= budget].copy()
 
 if category != "Any":
-    filtered = filtered[
-        filtered["category"] == category
-    ]
+    filtered = filtered[filtered["category"] == category]
 
 if color != "Any":
-    filtered = filtered[
-        filtered["color"] == color
-    ]
+    filtered = filtered[filtered["color"] == color]
 
 if style != "Any":
-    filtered = filtered[
-        filtered["style"] == style
-    ]
+    filtered = filtered[filtered["style"] == style]
 
 if occasion != "Any":
-    filtered = filtered[
-        filtered["occasion"] == occasion
-    ]
+    filtered = filtered[filtered["occasion"] == occasion]
 
 # ---------------- AI RECOMMENDATIONS ----------------
 
@@ -170,13 +283,11 @@ if st.session_state["search_clicked"]:
             "No products match these filters. "
             "Try increasing your budget or changing your preferences."
         )
-
     else:
         if query:
             query_vector = vectorizer.transform([query])
             scores = cosine_similarity(
-                query_vector,
-                product_vectors
+                query_vector, product_vectors
             ).flatten()
 
             filtered["AI Match Score"] = scores[filtered.index]
@@ -191,13 +302,10 @@ if st.session_state["search_clicked"]:
             f"Found {len(filtered)} products within your preferences!"
         )
 
-        st.subheader("🛍️ Recommended for You")
-
+        st.subheader("Recommended for You")
         columns = st.columns(3)
 
-        for position, (_, product) in enumerate(
-            filtered.iterrows()
-        ):
+        for position, (_, product) in enumerate(filtered.iterrows()):
             with columns[position % 3]:
                 st.markdown("---")
 
@@ -215,17 +323,16 @@ if st.session_state["search_clicked"]:
                 st.write(f"**Occasion:** {product['occasion']}")
                 st.caption(product["description"])
 
-                score = product["AI Match Score"] * 100
+                score = float(product["AI Match Score"]) * 100
                 st.progress(
-                    min(1.0, max(0.0, float(score))),
+                    min(1.0, max(0.0, score / 100)),
                     text=f"Text similarity: {score:.0f}%"
                 )
 
-                feedback_key = f"feedback_{product.name}"
                 feedback = st.selectbox(
                     "Your feedback",
                     ["Choose feedback", "👍 Like", "👎 Dislike"],
-                    key=feedback_key
+                    key=f"feedback_{product.name}"
                 )
 
                 if feedback in ["👍 Like", "👎 Dislike"]:
@@ -236,18 +343,20 @@ if st.session_state["search_clicked"]:
 
         # ---------------- OUTFIT SUGGESTIONS ----------------
 
-        st.subheader("👕 Outfit Suggestions")
+        st.subheader("Outfit Suggestions")
 
         tops = filtered[
             filtered["category"].str.lower().isin(
                 ["tops", "top", "shirt", "t-shirt"]
             )
         ]
+
         bottoms = filtered[
             filtered["category"].str.lower().isin(
                 ["bottoms", "bottom", "pants", "jeans"]
             )
         ]
+
         shoes = filtered[
             filtered["category"].str.lower().isin(
                 ["shoes", "footwear"]
@@ -282,16 +391,15 @@ if st.session_state["search_clicked"]:
                 "Add products from different categories to your "
                 "catalogue to generate more outfit combinations."
             )
-
 else:
     st.info(
         "Choose your filters, describe your style, "
-        "and click **Find My Style** to see recommendations."
+        "and click Find My Style to see recommendations."
     )
 
 # ---------------- PROJECT INFORMATION ----------------
 
-with st.expander("ℹ️ About this project"):
+with st.expander("About this project"):
     st.write(
         "Style Vision AI is a fashion recommendation prototype. "
         "It uses TF-IDF and cosine similarity to compare a user's "
@@ -300,9 +408,11 @@ with st.expander("ℹ️ About this project"):
     )
     st.write(
         "This is a content-based recommendation demo, not a trained "
-        "commercial AI system. Its recommendations depend on the "
-        "products available in products.csv."
+        "commercial AI system. Recommendations depend on the products "
+        "available in clothes.csv."
     )
 
 st.caption("Style Vision AI | AI Project Prototype")
+
+
 
