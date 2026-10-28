@@ -165,27 +165,26 @@ st.write("Your personal AI fashion assistant.")
 
 # ---------------- LOAD PRODUCTS ----------------
 
-@st.cache_data
 def load_products():
-    
-    df = pd.read_csv("clothes.csv")
+    data = pd.read_csv("clothes.csv")
 
-# Convert price values into numbers
-df["price"] = pd.to_numeric(
-    df["price"]
-    .astype(str)
-    .str.replace("₹", "", regex=False)
-    .str.replace(",", "", regex=False)
-    .str.strip(),
-    errors="coerce"
-)
+    # Convert prices into numbers
+    data["price"] = pd.to_numeric(
+        data["price"]
+        .astype(str)
+        .str.replace("₹", "", regex=False)
+        .str.replace(",", "", regex=False)
+        .str.strip(),
+        errors="coerce"
+    )
 
-# Remove products with invalid prices
-df = df.dropna(subset=["price"]).copy()
-df["price"] = df["price"].astype(float)
-
+    # Remove products with invalid prices
+    data = data.dropna(subset=["price"]).copy()
+    data["price"] = data["price"].astype(float)
 
     return data
+
+
 
 
 try:
