@@ -186,21 +186,20 @@ def load_products():
     for column in required:
         if column not in data.columns:
             raise ValueError(
-                f"Missing column in clothes.csv: {column}")
-    
-data["price"] = pd.to_numeric(
-    data["price"].astype(str).str.replace(
-        r"[₹,\s]", "", regex=True
-    ),
-    errors="coerce"
-)
+                f"Missing column in clothes.csv: {column}"
+            )
 
+    data["price"] = pd.to_numeric(
+        data["price"], errors="coerce"
+    )
     data = data.dropna(subset=["price"]).copy()
 
     for column in required:
         data[column] = data[column].fillna("").astype(str)
 
     return data
+
+
 
 
 try:
