@@ -209,9 +209,9 @@ def load_products():
 try:
     df = load_products()
 except Exception as error:
-    st.error(f"Could not load products.csv: {error}")
+    st.error(f"Could not load clothes.csv: {error}")
     st.info(
-        "Make sure products.csv is in the same folder as app.py "
+        "Make sure clothes.csv is in the same folder as app.py "
         "and contains the required column headings."
     )
     st.stop()
@@ -465,7 +465,7 @@ with st.expander("ℹ️ About this project"):
     st.write(
         "This is a content-based recommendation demo, not a trained "
         "commercial AI system. Its recommendations depend on the "
-        "products available in products.csv."
+        "products available in clothes.csv."
     )
 
 st.caption("Style Vision AI | AI Project Prototype")
