@@ -195,7 +195,6 @@ data["price"] = pd.to_numeric(
     errors="coerce"
 )
 
-    )
     data = data.dropna(subset=["price"]).copy()
 
     for column in required:
