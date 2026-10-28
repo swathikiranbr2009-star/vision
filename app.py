@@ -167,32 +167,25 @@ st.write("Your personal AI fashion assistant.")
 
 @st.cache_data
 def load_products():
-    data = pd.read_csv("clothes.csv")
+    
+df = pd.read_csv("clothes.csv")
 
-    required = [
-        "name", "category", "color", "style",
-        "occasion", "price", "description", "image"
-    ]
+# Convert price values into numbers
+df["price"] = pd.to_numeric(
+    df["price"]
+    .astype(str)
+    .str.replace("₹", "", regex=False)
+    .str.replace(",", "", regex=False)
+    .str.strip(),
+    errors="coerce"
+)
 
-    for column in required:
-        if column not in data.columns:
-            raise ValueError(
-                f"Missing column in clothes.csv: {column}"
-            )
+# Remove products with invalid prices
+df = df.dropna(subset=["price"]).copy()
+df["price"] = df["price"].astype(float)
 
-    data["price"] = pd.to_numeric(
-        data["price"].astype(str).str.replace(
-            r"[₹,\s]", "", regex=True
-        ),
-        errors="coerce"
-    )
 
-    data = data.dropna(subset=["price"]).copy()
-
-    for column in required:
-        data[column] = data[column].fillna("").astype(str)
-
-    return data
+return data
 
 
 try:
