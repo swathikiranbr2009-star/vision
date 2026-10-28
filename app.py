@@ -108,7 +108,7 @@ st.markdown("""
 .hero-banner {
     background:
         linear-gradient(90deg, rgba(5,22,15,0.96), rgba(5,22,15,0.2)),
-        url("https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=1800&q=85");
+        url("https://cdn.dribbble.com/userupload/47787263/file/b0a8b0925f7d0b5b7162137d55cda5d9.jpg?resize=1024x768&vertical=center");
     background-size: cover;
     background-position: center;
     min-height: 440px;
