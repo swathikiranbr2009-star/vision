@@ -185,7 +185,7 @@ df = df.dropna(subset=["price"]).copy()
 df["price"] = df["price"].astype(float)
 
 
-return data
+    return data
 
 
 try:
