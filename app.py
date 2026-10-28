@@ -103,7 +103,83 @@ hr {
 
 # ---------------- HERO BANNER ----------------
 
+
 st.markdown("""
+<style>
+.hero-banner {
+    background:
+        linear-gradient(90deg,
+            rgba(5, 22, 15, 0.96) 0%,
+            rgba(5, 22, 15, 0.78) 45%,
+            rgba(5, 22, 15, 0.20) 100%),
+        url("https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=1800&q=85");
+
+    background-size: cover;
+    background-position: center 35%;
+    background-repeat: no-repeat;
+
+    min-height: 440px;
+    padding: 45px;
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.hero-banner h1 {
+    color: #ffffff !important;
+    font-family: 'Barlow Condensed', sans-serif !important;
+    font-size: clamp(44px, 7vw, 78px);
+    font-weight: 800;
+    line-height: 0.98;
+    margin: 0;
+    max-width: 590px;
+}
+
+.hero-banner .accent {
+    color: #c9ff65 !important;
+}
+
+.hero-banner p {
+    color: #e2e9e4 !important;
+    font-size: 15px;
+    line-height: 1.8;
+    max-width: 360px;
+    margin: 20px 0;
+}
+
+.hero-banner .hero-button {
+    display: inline-block;
+    width: fit-content;
+    color: #102018 !important;
+    background: #c9ff65;
+    border-radius: 30px;
+    padding: 13px 24px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.hero-banner .features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 28px;
+    color: #e2e9e4;
+    font-size: 11px;
+}
+
+@media (max-width: 600px) {
+    .hero-banner {
+        padding: 28px 22px;
+        min-height: 400px;
+        background-position: center;
+    }
+}
+</style>
+
 <div class="hero-banner">
     <h1>
         FIND YOUR<br>
@@ -126,6 +202,7 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
+
 
 
 
